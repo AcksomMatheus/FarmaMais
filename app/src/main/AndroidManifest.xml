@@ -9,12 +9,14 @@
         android:roundIcon="@drawable/mrosa"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.NovoProdutoFarmaceuticaActivity"
-            android:parentActivityName=".activity.FarmaceuticaActivity">
-        </activity>
-        <activity android:name=".activity.ConfiguracoesFarmaceuticaActivity"
-            android:parentActivityName=".activity.FarmaceuticaActivity">
-        </activity>
+        <activity android:name=".activity.ConfiguracoesBalconistaActivity"
+            android:parentActivityName=".activity.HomeActivity"></activity>
+        <activity
+            android:name=".activity.NovoProdutoFarmaceuticaActivity"
+            android:parentActivityName=".activity.FarmaceuticaActivity"></activity>
+        <activity
+            android:name=".activity.ConfiguracoesFarmaceuticaActivity"
+            android:parentActivityName=".activity.FarmaceuticaActivity"></activity>
         <activity android:name=".activity.FarmaceuticaActivity" />
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.AutenticacaoActivity" />
