@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="br.edu.ifs.farmamais">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/mrosa"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/mrosa"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activity.NovoProdutoFarmaceuticaActivity"
+            android:parentActivityName=".activity.FarmaceuticaActivity">
+        </activity>
+        <activity android:name=".activity.ConfiguracoesFarmaceuticaActivity"
+            android:parentActivityName=".activity.FarmaceuticaActivity">
+        </activity>
+        <activity android:name=".activity.FarmaceuticaActivity" />
+        <activity android:name=".activity.HomeActivity" />
+        <activity android:name=".activity.AutenticacaoActivity" />
+        <activity android:name=".activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
