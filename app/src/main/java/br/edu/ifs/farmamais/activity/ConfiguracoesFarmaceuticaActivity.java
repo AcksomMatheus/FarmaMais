@@ -89,6 +89,7 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
                         farmaceutica.setHoraSaida(horaSaida);
                         farmaceutica.setUrlImagem(urlImagemSelecionada);
                         farmaceutica.salvar();
+                        finish();
 
                     }else{
                         exibitMensagem("Digite uma hora de saida");
