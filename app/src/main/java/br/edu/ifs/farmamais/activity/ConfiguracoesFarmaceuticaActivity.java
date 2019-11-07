@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.storage.StorageManager;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
@@ -18,8 +17,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 
@@ -34,8 +38,8 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
     private ImageView imagePerfilFarmaceutica;
 
     private static final int SELECAO_GALERIA = 200;
-
     private StorageReference storageReference;
+    private DatabaseReference firebaseRef;
     private String idUsuarioLogado;
     private String urlImagemSelecionada = "";
 
@@ -47,6 +51,7 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
         //Configurações iniciais
         inicializarComponentes();
         storageReference = ConfiguracaoFirebase.getReferenciaStorage();
+        firebaseRef = ConfiguracaoFirebase.getReferenciaFirebase();
         idUsuarioLogado = UsuarioFirebase.getIdUsuario();
 
         //Configurações Toolbar
@@ -68,6 +73,37 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
             }
         });
 
+        /*Recuperar dados da farmaceutica*/
+        recuperarDadosFarmaceutica();
+
+    }
+
+    private void recuperarDadosFarmaceutica(){
+        DatabaseReference farmaceuticaRef = firebaseRef.child("farmaceuticas").child( idUsuarioLogado );
+        farmaceuticaRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if( dataSnapshot.getValue() != null){
+                    Farmaceutica farmaceutica = dataSnapshot.getValue(Farmaceutica.class);
+                    editNomeFarmaceutica.setText(farmaceutica.getNomeFarmaceutica());
+                    editNomeFarmacia.setText(farmaceutica.getNomeFarmacia());
+                    editHoraEntrada.setText((farmaceutica.getHoraEntrada()));
+                    editHoraSaida.setText((farmaceutica.getHoraSaida()));
+
+                    urlImagemSelecionada = farmaceutica.getUrlImagem();
+                    if(urlImagemSelecionada != ""){
+                        Picasso.get().load(urlImagemSelecionada).into(imagePerfilFarmaceutica);
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void validarDadosFarmaceutica(View view){
@@ -155,8 +191,8 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
     private void inicializarComponentes() {
         editHoraEntrada = findViewById(R.id.editHoraEntrada);
         editHoraSaida = findViewById(R.id.editHoraSaida);
-        editNomeFarmaceutica = findViewById(R.id.editFarmaceuticaNome);
-        editNomeFarmacia = findViewById(R.id.editFarmaciaNome);
+        editNomeFarmaceutica = findViewById(R.id.editProdutoNome);
+        editNomeFarmacia = findViewById(R.id.editProdutoCategoria);
         imagePerfilFarmaceutica = findViewById(R.id.imagePerfilFarmaceutica);
     }
 }

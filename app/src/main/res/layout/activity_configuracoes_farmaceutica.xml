@@ -27,7 +27,7 @@
             android:src="@drawable/perfil"/>
 
         <EditText
-            android:id="@+id/editFarmaceuticaNome"
+            android:id="@+id/editProdutoNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_edit_text"
@@ -37,7 +37,7 @@
             android:padding="16dp" />
 
         <EditText
-            android:id="@+id/editFarmaciaNome"
+            android:id="@+id/editProdutoCategoria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-2dp"
@@ -55,7 +55,7 @@
             android:background="@drawable/bg_edit_text"
             android:ems="10"
             android:hint="Horario de Entrada"
-            android:inputType="time"
+            android:inputType="date|number|time"
             android:padding="16dp" />
 
         <EditText
@@ -66,7 +66,7 @@
             android:background="@drawable/bg_edit_text"
             android:ems="10"
             android:hint="Horario de Saida"
-            android:inputType="time"
+            android:inputType="date|number|time"
             android:padding="16dp" />
 
         <Button
