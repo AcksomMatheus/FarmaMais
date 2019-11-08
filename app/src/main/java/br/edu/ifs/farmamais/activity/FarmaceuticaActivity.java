@@ -16,13 +16,11 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,6 @@ import br.edu.ifs.farmamais.adapter.AdapterProduto;
 import br.edu.ifs.farmamais.helper.ConfiguracaoFirebase;
 import br.edu.ifs.farmamais.helper.UsuarioFirebase;
 import br.edu.ifs.farmamais.listener.RecyclerItemClickListener;
-import br.edu.ifs.farmamais.model.Farmaceutica;
 import br.edu.ifs.farmamais.model.Produto;
 
 public class FarmaceuticaActivity extends AppCompatActivity {
@@ -119,7 +116,7 @@ public class FarmaceuticaActivity extends AppCompatActivity {
     }
 
     private void inicializarComponentes() {
-        recyclerProdutos = findViewById(R.id.RecyclerProdutos);
+        recyclerProdutos = findViewById(R.id.recyclerFarmaceutica);
     }
 
     @Override
