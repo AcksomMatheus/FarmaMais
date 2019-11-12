@@ -1,13 +1,18 @@
 package br.edu.ifs.farmamais.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,6 +42,7 @@ public class FarmaceuticaActivity extends AppCompatActivity {
     private RecyclerView recyclerProdutos;
     private AdapterProduto adapterProduto;
     private List<Produto> produtos = new ArrayList<>();
+    private Produto produto;
     private DatabaseReference firebaseRef;
     private String idUsuarioLogado;
 
@@ -62,6 +68,8 @@ public class FarmaceuticaActivity extends AppCompatActivity {
         recyclerProdutos.setHasFixedSize(true);
         adapterProduto = new AdapterProduto(produtos, this);
         recyclerProdutos.setAdapter(adapterProduto);
+        swipe();
+
 
         //Recuperar Produtos
         recuperarProdutos();
@@ -77,9 +85,14 @@ public class FarmaceuticaActivity extends AppCompatActivity {
 
                     @Override
                     public void onLongItemClick(View view, int position) {
+                       Intent it = new Intent(FarmaceuticaActivity.this, EditProdutoFarmaceuticaActivity.class);
+                       // it.putExtra("Posicao", position);
                         Produto produtoSelecionado = produtos.get(position);
-                        produtoSelecionado.remover();
-                        Toast.makeText(FarmaceuticaActivity.this, "Produto excluído com sucesso!", Toast.LENGTH_SHORT).show();
+                        it.putExtra("Posicao", produtoSelecionado.recuperarDados());
+                        startActivity(it);
+                   // produtoSelecionado.remover();
+                        // Toast.makeText(FarmaceuticaActivity.this, "Produto excluído com sucesso!", Toast.LENGTH_SHORT).show();
+
 
                     }
 
@@ -91,7 +104,63 @@ public class FarmaceuticaActivity extends AppCompatActivity {
                 )
         );
 
+    }
 
+    //Swipe
+    public void swipe(){
+        final ItemTouchHelper.Callback itemTouch = new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.ACTION_STATE_IDLE;
+                int swipeFlags= ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                excluirProduto( viewHolder );
+            }
+        };
+
+        new ItemTouchHelper( itemTouch ).attachToRecyclerView( recyclerProdutos );
+    }
+
+    public void excluirProduto(final RecyclerView.ViewHolder viewHolder){
+
+        AlertDialog.Builder alerDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
+
+        //Configura AlertDialog
+        alerDialog.setTitle("Excluir Produto");
+        alerDialog.setMessage("Você tem certeza que deseja excluir esse produto?");
+        alerDialog.setCancelable(false);
+
+
+        alerDialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int position = viewHolder.getAdapterPosition();
+                produto = produtos.get( position );
+                produto.remover();
+                Toast.makeText(FarmaceuticaActivity.this, "Produto excluído com sucesso!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        alerDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(FarmaceuticaActivity.this, "Cancelado", Toast.LENGTH_SHORT).show();
+                adapterProduto.notifyDataSetChanged();
+            }
+        });
+
+        AlertDialog alert = alerDialog.create();
+        alert.show();
     }
 
     private void recuperarProdutos() {

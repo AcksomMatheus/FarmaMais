@@ -80,4 +80,10 @@ public class Produto {
         produtoRef.removeValue();
 
     }
+
+    public String recuperarDados(){
+        DatabaseReference firebaseRef = ConfiguracaoFirebase.getReferenciaFirebase();
+        DatabaseReference produtoRef = firebaseRef.child("produtos").child(getIdUsuario()).child(getIdProduto());
+        return getIdProduto();
+    }
 }

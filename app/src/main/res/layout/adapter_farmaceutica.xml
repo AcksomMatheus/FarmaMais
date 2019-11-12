@@ -43,7 +43,7 @@
                     android:id="@+id/textNomeFarmacia"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FarmaMais" />
+                    android:text="CRM" />
 
                 <TextView
                     android:id="@+id/textHoraEntrada"

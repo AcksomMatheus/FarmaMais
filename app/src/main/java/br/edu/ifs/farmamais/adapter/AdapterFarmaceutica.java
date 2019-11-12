@@ -40,9 +40,9 @@ public class AdapterFarmaceutica extends RecyclerView.Adapter<AdapterFarmaceutic
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
         Farmaceutica farmaceutica = farmaceuticas.get(i);
         holder.nomeFarmaceutica.setText(farmaceutica.getNomeFarmaceutica());
-        holder.nomeFarmacia.setText(farmaceutica.getNomeFarmacia() + " -");
-        holder.horaEntrada.setText(farmaceutica.getHoraEntrada() + "");
-        holder.horaSaida.setText("- " + farmaceutica.getHoraSaida());
+        holder.nomeFarmacia.setText("CMR: "+farmaceutica.getNomeCRM() + " -");
+        holder.horaEntrada.setText(farmaceutica.getHoraEntrada() + "hr");
+        holder.horaSaida.setText("- " + farmaceutica.getHoraSaida()+"hr");
 
         //Carregar imagem
         String urlImagem = farmaceutica.getUrlImagem();

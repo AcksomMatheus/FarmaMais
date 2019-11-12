@@ -34,7 +34,7 @@ import br.edu.ifs.farmamais.model.Farmaceutica;
 
 public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
 
-    private EditText editNomeFarmaceutica, editNomeFarmacia, editHoraEntrada, editHoraSaida;
+    private EditText editNomeFarmaceutica, editNomeCRM, editHoraEntrada, editHoraSaida;
     private ImageView imagePerfilFarmaceutica;
 
     private static final int SELECAO_GALERIA = 200;
@@ -86,7 +86,7 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
                 if( dataSnapshot.getValue() != null){
                     Farmaceutica farmaceutica = dataSnapshot.getValue(Farmaceutica.class);
                     editNomeFarmaceutica.setText(farmaceutica.getNomeFarmaceutica());
-                    editNomeFarmacia.setText(farmaceutica.getNomeFarmacia());
+                    editNomeCRM.setText(farmaceutica.getNomeCRM());
                     editHoraEntrada.setText((farmaceutica.getHoraEntrada()));
                     editHoraSaida.setText((farmaceutica.getHoraSaida()));
 
@@ -109,7 +109,7 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
     public void validarDadosFarmaceutica(View view){
         //Valida se os campos foram preenchidos
         String nomeFarmaceutica = editNomeFarmaceutica.getText().toString();
-        String nomeFarmacia = editNomeFarmacia.getText().toString();
+        String nomeFarmacia = editNomeCRM.getText().toString();
         String horaEntrada = editHoraEntrada.getText().toString();
         String horaSaida = editHoraSaida.getText().toString();
 
@@ -120,7 +120,7 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
                         Farmaceutica farmaceutica = new Farmaceutica();
                         farmaceutica.setIdUsuario(idUsuarioLogado);
                         farmaceutica.setNomeFarmaceutica(nomeFarmaceutica);
-                        farmaceutica.setNomeFarmacia(nomeFarmacia);
+                        farmaceutica.setNomeCRM(nomeFarmacia);
                         farmaceutica.setHoraEntrada(horaEntrada);
                         farmaceutica.setHoraSaida(horaSaida);
                         farmaceutica.setUrlImagem(urlImagemSelecionada);
@@ -192,7 +192,7 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
         editHoraEntrada = findViewById(R.id.editHoraEntrada);
         editHoraSaida = findViewById(R.id.editHoraSaida);
         editNomeFarmaceutica = findViewById(R.id.editProdutoNome);
-        editNomeFarmacia = findViewById(R.id.editProdutoCategoria);
+        editNomeCRM = findViewById(R.id.editProdutoCategoria);
         imagePerfilFarmaceutica = findViewById(R.id.imagePerfilFarmaceutica);
     }
 }

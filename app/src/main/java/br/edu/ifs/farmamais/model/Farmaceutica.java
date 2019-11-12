@@ -1,10 +1,7 @@
 package br.edu.ifs.farmamais.model;
 
-import android.provider.ContactsContract;
-
 import com.google.firebase.database.DatabaseReference;
 
-import br.edu.ifs.farmamais.activity.ConfiguracoesFarmaceuticaActivity;
 import br.edu.ifs.farmamais.helper.ConfiguracaoFirebase;
 
 public class Farmaceutica {
@@ -12,7 +9,7 @@ public class Farmaceutica {
     private String idUsuario;
     private String urlImagem;
     private String nomeFarmaceutica;
-    private String nomeFarmacia;
+    private String nomeCRM;
     private String horaEntrada;
     private String horaSaida;
 
@@ -49,12 +46,12 @@ public class Farmaceutica {
         this.nomeFarmaceutica = nomeFarmaceutica;
     }
 
-    public String getNomeFarmacia() {
-        return nomeFarmacia;
+    public String getNomeCRM() {
+        return nomeCRM;
     }
 
-    public void setNomeFarmacia(String nomeFarmacia) {
-        this.nomeFarmacia = nomeFarmacia;
+    public void setNomeCRM(String nomeCRM) {
+        this.nomeCRM = nomeCRM;
     }
 
     public String getHoraEntrada() {

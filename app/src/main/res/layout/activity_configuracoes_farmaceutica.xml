@@ -43,8 +43,8 @@
             android:layout_marginTop="-2dp"
             android:background="@drawable/bg_edit_text"
             android:ems="10"
-            android:hint="Nome Farmacia"
-            android:inputType="text"
+            android:hint="CRM Farmaceutico"
+            android:inputType="number"
             android:padding="16dp" />
 
         <EditText
