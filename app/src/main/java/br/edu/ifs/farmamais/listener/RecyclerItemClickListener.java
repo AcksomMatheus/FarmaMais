@@ -1,11 +1,14 @@
 package br.edu.ifs.farmamais.listener;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -38,6 +41,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     }
 
     public interface OnItemClickListener extends AdapterView.OnItemClickListener {
+
         public void onItemClick(View view, int position);
 
         public void onLongItemClick(View view, int position);
@@ -58,7 +62,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
                     mListener.onLongItemClick(child, recyclerView.getChildAdapterPosition(child));
                 }
             }
-        });
 
+        });
     }
 }

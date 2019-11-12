@@ -36,6 +36,8 @@ public class HomeActivity extends AppCompatActivity {
         toolbar.setTitle("FarmaMais - Balconista");
         setSupportActionBar(toolbar);
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
