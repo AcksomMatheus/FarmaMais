@@ -19,7 +19,7 @@ import br.edu.ifs.farmamais.model.Produto;
 public class NovoProdutoFarmaceuticaActivity extends AppCompatActivity {
 
 
-    private EditText editProdutoNome, editProdutoCategoria, editProdutoDescricao, editProdutoPreco;
+    private EditText editProdutoNome, editProdutoCategoria, editProdutoDescricao, editProdutoPreco, editProdutoPrecoDesc;
     private String idUsuarioLogado;
 
     @Override
@@ -45,23 +45,29 @@ public class NovoProdutoFarmaceuticaActivity extends AppCompatActivity {
         String descricaoProduto = editProdutoDescricao.getText().toString();
         String categoriaProduto = editProdutoCategoria.getText().toString();
         String precoProduto = editProdutoPreco.getText().toString();
+        String precoDesc = editProdutoPrecoDesc.getText().toString();
 
         if (!nomeProduto.isEmpty()) {
             if (!descricaoProduto.isEmpty()) {
                 if (!categoriaProduto.isEmpty()) {
-                    if(!precoProduto.isEmpty()){
-                        Produto produto = new Produto();
-                        produto.setIdUsuario(idUsuarioLogado);
-                        produto.setNome(nomeProduto);
-                        produto.setCategoria(categoriaProduto);
-                        produto.setDescricao(descricaoProduto);
-                        produto.setPreco(Double.parseDouble(precoProduto));
-                        produto.salvar();
-                        finish();
-                        exibitMensagem("Produto salvo com sucesso");
+                    if(!precoDesc.isEmpty()) {
+                        if (!precoProduto.isEmpty()) {
+                            Produto produto = new Produto();
+                            produto.setIdUsuario(idUsuarioLogado);
+                            produto.setNome(nomeProduto);
+                            produto.setCategoria(categoriaProduto);
+                            produto.setDescricao(descricaoProduto);
+                            produto.setPreco(Double.parseDouble(precoProduto));
+                            produto.setPrecoDesc(Double.parseDouble(precoDesc));
+                            produto.salvar();
+                            finish();
+                            exibitMensagem("Produto salvo com sucesso");
 
+                        } else {
+                            exibitMensagem("Digite um Preço para o Produto");
+                        }
                     }else{
-                        exibitMensagem("Digite um Preço para o Produto");
+                        exibitMensagem("Digite um Preço com Desconto");
                     }
 
                 }else{
@@ -83,6 +89,7 @@ public class NovoProdutoFarmaceuticaActivity extends AppCompatActivity {
         editProdutoDescricao = findViewById(R.id.editProdutoDescricao);
         editProdutoNome = findViewById(R.id.editProdutoNome);
         editProdutoPreco = findViewById(R.id.editProdutoPreco);
+        editProdutoPrecoDesc = findViewById(R.id.editProdutoPrecoDesc);
 
     }
 }

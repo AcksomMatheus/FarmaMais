@@ -2,9 +2,11 @@ package br.edu.ifs.farmamais.model;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
+
 import br.edu.ifs.farmamais.helper.ConfiguracaoFirebase;
 
-public class Produto {
+public class Produto  implements Serializable {
 
     private String idUsuario;
     private String idProduto;
@@ -21,6 +23,8 @@ public class Produto {
     private String descricao;
     private String categoria;
     private Double preco;
+    private Double precoDesc;
+
 
     public Produto() {
         DatabaseReference firebaseRef = ConfiguracaoFirebase.getReferenciaFirebase();
@@ -66,6 +70,14 @@ public class Produto {
 
     public void setPreco(Double preco) {
         this.preco = preco;
+    }
+
+    public Double getPrecoDesc() {
+        return precoDesc;
+    }
+
+    public void setPrecoDesc(Double precoDesc) {
+        this.precoDesc = precoDesc;
     }
 
     public void salvar() {

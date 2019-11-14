@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_edit_text"
             android:ems="10"
-            android:hint="Nome Produto"
+            android:hint="Nome do Produto"
             android:inputType="textPersonName"
             android:padding="16dp" />
 
@@ -57,7 +57,18 @@
             android:layout_marginTop="-2dp"
             android:background="@drawable/bg_edit_text"
             android:ems="10"
-            android:hint="Preco"
+            android:hint="Preço Normal"
+            android:inputType="numberDecimal"
+            android:padding="16dp" />
+
+        <EditText
+            android:id="@+id/editProdutoPrecoDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
+            android:background="@drawable/bg_edit_text"
+            android:ems="10"
+            android:hint="Preço com Desconto"
             android:inputType="numberDecimal"
             android:padding="16dp" />
 

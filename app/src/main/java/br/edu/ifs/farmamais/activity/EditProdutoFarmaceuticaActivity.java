@@ -22,7 +22,7 @@ import br.edu.ifs.farmamais.model.Produto;
 
 public class EditProdutoFarmaceuticaActivity extends AppCompatActivity {
 
-    private EditText editProdutoNome, editProdutoCategoria, editProdutoDescricao, editProdutoPreco;
+    private EditText editProdutoNome, editProdutoCategoria, editProdutoDescricao, editProdutoPreco, editProdutoPrecoDesc;
     private String idUsuarioLogado;
     private String idProduto;
     private StorageReference storageReference;
@@ -31,7 +31,7 @@ public class EditProdutoFarmaceuticaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_produto_farmaceutica);
+        setContentView(R.layout.activity_novo_produto_farmaceutica);
 
         //Configurações Toolbar
 
@@ -52,13 +52,6 @@ public class EditProdutoFarmaceuticaActivity extends AppCompatActivity {
         recuperarProdutos();
     }
 
-    private void inicializarComponentes() {
-        editProdutoCategoria = findViewById(R.id.editProdutoCategoria);
-        editProdutoDescricao = findViewById(R.id.editProdutoDescricao);
-        editProdutoNome = findViewById(R.id.editProdutoNome);
-        editProdutoPreco = findViewById(R.id.editProdutoPreco);
-    }
-
     //Recuperar Produtos
     private void recuperarProdutos() {
         DatabaseReference produtoRef = firebaseRef.child("produtos").child(idUsuarioLogado).child(idProduto);
@@ -70,7 +63,7 @@ public class EditProdutoFarmaceuticaActivity extends AppCompatActivity {
                     editProdutoCategoria.setText(produto.getCategoria());
                     editProdutoDescricao.setText(produto.getDescricao());
                     editProdutoPreco.setText(String.valueOf(produto.getPreco()));
-
+                    editProdutoPrecoDesc.setText(String.valueOf(produto.getPrecoDesc()));
             }
 
             @Override
@@ -85,24 +78,30 @@ public class EditProdutoFarmaceuticaActivity extends AppCompatActivity {
         String descricaoProduto = editProdutoDescricao.getText().toString();
         String categoriaProduto = editProdutoCategoria.getText().toString();
         String precoProduto = editProdutoPreco.getText().toString();
+        String precoDesc = editProdutoPrecoDesc.getText().toString();
 
         if (!nomeProduto.isEmpty()) {
             if (!descricaoProduto.isEmpty()) {
                 if (!categoriaProduto.isEmpty()) {
-                    if(!precoProduto.isEmpty()){
-                        Produto produto = new Produto();
-                        produto.setIdUsuario(idUsuarioLogado);
-                        produto.setIdProduto(idProduto);
-                        produto.setNome(nomeProduto);
-                        produto.setCategoria(categoriaProduto);
-                        produto.setDescricao(descricaoProduto);
-                        produto.setPreco(Double.parseDouble(precoProduto));
-                        produto.salvar();
-                        finish();
-                        exibitMensagem("Produto salvo com sucesso");
+                    if(!precoDesc.isEmpty()) {
+                        if (!precoProduto.isEmpty()) {
+                            Produto produto = new Produto();
+                            produto.setIdUsuario(idUsuarioLogado);
+                            produto.setIdProduto(idProduto);
+                            produto.setNome(nomeProduto);
+                            produto.setCategoria(categoriaProduto);
+                            produto.setDescricao(descricaoProduto);
+                            produto.setPreco(Double.parseDouble(precoProduto));
+                            produto.setPrecoDesc(Double.parseDouble(precoDesc));
+                            produto.salvar();
+                            finish();
+                            exibitMensagem("Produto salvo com sucesso");
 
+                        } else {
+                            exibitMensagem("Digite um Preço para o Produto");
+                        }
                     }else{
-                        exibitMensagem("Digite um Preço para o Produto");
+                        exibitMensagem("Digite um Preço com Desconto");
                     }
 
                 }else{
@@ -119,6 +118,13 @@ public class EditProdutoFarmaceuticaActivity extends AppCompatActivity {
         Toast.makeText(this, texto, Toast.LENGTH_SHORT).show();
     }
 
+    private void inicializarComponentes() {
+        editProdutoCategoria = findViewById(R.id.editProdutoCategoria);
+        editProdutoDescricao = findViewById(R.id.editProdutoDescricao);
+        editProdutoNome = findViewById(R.id.editProdutoNome);
+        editProdutoPreco = findViewById(R.id.editProdutoPreco);
+        editProdutoPrecoDesc = findViewById(R.id.editProdutoPrecoDesc);
+    }
 
 
 }

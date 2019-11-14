@@ -94,7 +94,7 @@
             android:id="@+id/textView3"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:text="Balconista"
+            android:text="Cliente"
             android:textColor="@android:color/white" />
 
 

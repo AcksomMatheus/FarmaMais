@@ -2,9 +2,11 @@ package br.edu.ifs.farmamais.model;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
+
 import br.edu.ifs.farmamais.helper.ConfiguracaoFirebase;
 
-public class Farmaceutica {
+public class Farmaceutica implements Serializable {
 
     private String idUsuario;
     private String urlImagem;

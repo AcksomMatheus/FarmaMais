@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,8 +27,8 @@ import java.util.List;
 
 import br.edu.ifs.farmamais.R;
 import br.edu.ifs.farmamais.adapter.AdapterFarmaceutica;
-import br.edu.ifs.farmamais.adapter.AdapterProduto;
 import br.edu.ifs.farmamais.helper.ConfiguracaoFirebase;
+import br.edu.ifs.farmamais.listener.RecyclerItemClickListener;
 import br.edu.ifs.farmamais.model.Farmaceutica;
 
 public class HomeActivity extends AppCompatActivity {
@@ -51,8 +53,9 @@ public class HomeActivity extends AppCompatActivity {
         //Configurações Toolbar
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("FarmaMais - Balconista");
+        toolbar.setTitle("FarmaMais");
         setSupportActionBar(toolbar);
+
         //Configurações RecyclerView
         recyclerFarmaceutica.setLayoutManager(new LinearLayoutManager(this));
         recyclerFarmaceutica.setHasFixedSize(true);
@@ -76,6 +79,31 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        //Evento de Clique
+        recyclerFarmaceutica.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerFarmaceutica, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                Farmaceutica farmaceuticaSelecionada = farmaceuticas.get((position));
+                Intent i = new Intent(HomeActivity.this, ProdutosActivity.class);
+
+                i.putExtra("farmaceutica", farmaceuticaSelecionada);
+
+                startActivity(i);
+
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        }));
     }
 
     private void pesquisarFarmaceuticas(String pesquisa) {
@@ -85,7 +113,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 farmaceuticas.clear();
-                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     farmaceuticas.add(ds.getValue(Farmaceutica.class));
                 }
                 adapterFarmaceutica.notifyDataSetChanged();
@@ -104,7 +132,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 farmaceuticas.clear();
-                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     farmaceuticas.add(ds.getValue(Farmaceutica.class));
                 }
                 adapterFarmaceutica.notifyDataSetChanged();
@@ -134,11 +162,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()){
-            case R.id.menuSair :
+        switch (item.getItemId()) {
+            case R.id.menuSair:
                 deslogarUsuario();
                 break;
-            case R.id.menuConfiguracoes :
+            case R.id.menuConfiguracoes:
                 abrirConfiguracoes();
                 break;
         }
@@ -146,22 +174,22 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void inicializarComponentes(){
+    private void inicializarComponentes() {
         searchView = findViewById(R.id.materialSearchView);
-        recyclerFarmaceutica = findViewById(R.id.recyclerFarmaceutica);
+        recyclerFarmaceutica = findViewById(R.id.recyclerProdutos);
     }
 
-    private void deslogarUsuario(){
+    private void deslogarUsuario() {
         try {
             autenticacao.signOut();
             finish();
             startActivity(new Intent(getApplicationContext(), AutenticacaoActivity.class));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void abrirConfiguracoes(){
-        startActivity(new Intent(HomeActivity.this, ConfiguracoesBalconistaActivity.class));
+    private void abrirConfiguracoes() {
+        startActivity(new Intent(HomeActivity.this, ConfiguracoesClienteActivity.class));
     }
 }

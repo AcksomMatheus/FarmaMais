@@ -1,6 +1,7 @@
 package br.edu.ifs.farmamais.adapter;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,8 @@ public class AdapterProduto extends RecyclerView.Adapter<AdapterProduto.MyViewHo
         holder.nome.setText(produto.getNome());
         holder.categoria.setText("Categoria: " + produto.getCategoria());
         holder.descricao.setText("Descrição: " + produto.getDescricao());
-        holder.valor.setText("R$ " + produto.getPreco());
+        holder.preco.setText("R$ " + produto.getPreco());
+        holder.precoDesc.setText(" - R$ " + produto.getPrecoDesc());
     }
 
     @Override
@@ -53,8 +55,9 @@ public class AdapterProduto extends RecyclerView.Adapter<AdapterProduto.MyViewHo
 
         TextView nome;
         TextView descricao;
-        TextView valor;
+        TextView preco;
         TextView categoria;
+        TextView precoDesc;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -62,7 +65,9 @@ public class AdapterProduto extends RecyclerView.Adapter<AdapterProduto.MyViewHo
             nome = itemView.findViewById(R.id.textNomeProduto);
             descricao = itemView.findViewById(R.id.textDescricaoProduto);
             categoria = itemView.findViewById(R.id.textCategoriaProduto);
-            valor = itemView.findViewById(R.id.textPreco);
+            preco = itemView.findViewById(R.id.textPreco);
+            precoDesc = itemView.findViewById(R.id.textPrecoDesc);
+            preco.setPaintFlags(preco.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 }
