@@ -44,5 +44,10 @@ dependencies {
     /*Picasso*/
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    /*SpotsDialog*/
+    implementation 'com.github.d-max:spots-dialog:1.1@aar'
+
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+
 }
 apply plugin: 'com.google.gms.google-services'

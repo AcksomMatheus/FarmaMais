@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -31,6 +32,7 @@ import br.edu.ifs.farmamais.R;
 import br.edu.ifs.farmamais.helper.ConfiguracaoFirebase;
 import br.edu.ifs.farmamais.helper.UsuarioFirebase;
 import br.edu.ifs.farmamais.model.Farmaceutica;
+import dmax.dialog.SpotsDialog;
 
 public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
 
@@ -41,7 +43,8 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private DatabaseReference firebaseRef;
     private String idUsuarioLogado;
-    private String urlImagemSelecionada = "";
+    private AlertDialog dialog;
+    private String urlImagemSelecionada = "https://firebasestorage.googleapis.com/v0/b/farmamais-4f7ac.appspot.com/o/imagens%2Ffarmaceuticas%2Fperfil.png?alt=media&token=3f562b3f-f948-4a72-81c3-3a42b24421d9";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,7 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
             }
         });
 
+
         /*Recuperar dados da farmaceutica*/
         recuperarDadosFarmaceutica();
 
@@ -89,10 +93,10 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
                     editNomeCRM.setText(farmaceutica.getNomeCRM());
                     editHoraEntrada.setText((farmaceutica.getHoraEntrada()));
                     editHoraSaida.setText((farmaceutica.getHoraSaida()));
-
                     urlImagemSelecionada = farmaceutica.getUrlImagem();
                     if(urlImagemSelecionada != ""){
                         Picasso.get().load(urlImagemSelecionada).into(imagePerfilFarmaceutica);
+
                     }
 
 
@@ -112,6 +116,7 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
         String nomeFarmacia = editNomeCRM.getText().toString();
         String horaEntrada = editHoraEntrada.getText().toString();
         String horaSaida = editHoraSaida.getText().toString();
+
 
         if (!nomeFarmaceutica.isEmpty()) {
             if (!nomeFarmacia.isEmpty()) {
@@ -146,6 +151,9 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        dialog = new SpotsDialog.Builder().setContext(this).setMessage("Carregando Imagem").setCancelable(false).build();
+
+        dialog.show();
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             Bitmap imagem = null;
@@ -167,16 +175,18 @@ public class ConfiguracoesFarmaceuticaActivity extends AppCompatActivity {
                     imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
                     byte[] dadosImagem = baos.toByteArray();
                     StorageReference imagemRef = storageReference.child("imagens").child("farmaceuticas").child(idUsuarioLogado + "jpeg");
-
+                    
                     UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(ConfiguracoesFarmaceuticaActivity.this, "Erro ao carregar imagem", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            dialog.dismiss();
                             urlImagemSelecionada = taskSnapshot.getDownloadUrl().toString();
                             Toast.makeText(ConfiguracoesFarmaceuticaActivity.this, "Sucesso ao carregar imagem", Toast.LENGTH_SHORT).show();
                         }
