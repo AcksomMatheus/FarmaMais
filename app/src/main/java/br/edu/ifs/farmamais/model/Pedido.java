@@ -2,6 +2,7 @@ package br.edu.ifs.farmamais.model;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.HashMap;
 import java.util.List;
 
 import br.edu.ifs.farmamais.activity.ConfiguracoesFarmaceuticaActivity;
@@ -37,6 +38,28 @@ public class Pedido {
         DatabaseReference firebaseRef = ConfiguracaoFirebase.getReferenciaFirebase();
         DatabaseReference pedidoRef = firebaseRef.child("pedidos_cliente").child(getIdFarmaceutica()).child(getIdUsuario());
         pedidoRef.setValue(this);
+    }
+    public void confirmar() {
+        DatabaseReference firebaseRef = ConfiguracaoFirebase.getReferenciaFirebase();
+        DatabaseReference pedidoRef = firebaseRef.child("pedidos").child(getIdFarmaceutica()).child(getIdPedido());
+        pedidoRef.setValue(this);
+    }
+
+    public void remover() {
+        DatabaseReference firebaseRef = ConfiguracaoFirebase.getReferenciaFirebase();
+        DatabaseReference pedidoRef = firebaseRef.child("pedidos_cliente").child(getIdFarmaceutica()).child(getIdUsuario());
+        pedidoRef.removeValue();
+
+    }
+    public void atualizarStatus() {
+
+        HashMap<String, Object> status = new HashMap<>();
+        status.put("status", getStatus());
+
+        DatabaseReference firebaseRef = ConfiguracaoFirebase.getReferenciaFirebase();
+        DatabaseReference pedidoRef = firebaseRef.child("pedidos").child(getIdFarmaceutica()).child(getIdPedido());
+        pedidoRef.updateChildren( status );
+
     }
 
     public String getIdUsuario() {
@@ -134,6 +157,7 @@ public class Pedido {
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
+
 
 
 }

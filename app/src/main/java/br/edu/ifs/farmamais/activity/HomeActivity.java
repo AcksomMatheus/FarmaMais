@@ -28,6 +28,7 @@ import java.util.List;
 import br.edu.ifs.farmamais.R;
 import br.edu.ifs.farmamais.adapter.AdapterFarmaceutica;
 import br.edu.ifs.farmamais.helper.ConfiguracaoFirebase;
+import br.edu.ifs.farmamais.helper.UsuarioFirebase;
 import br.edu.ifs.farmamais.listener.RecyclerItemClickListener;
 import br.edu.ifs.farmamais.model.Farmaceutica;
 
@@ -39,6 +40,8 @@ public class HomeActivity extends AppCompatActivity {
     private List<Farmaceutica> farmaceuticas = new ArrayList<>();
     private DatabaseReference firebaseRef;
     private AdapterFarmaceutica adapterFarmaceutica;
+    private String nomeUsuarioLogado;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +50,8 @@ public class HomeActivity extends AppCompatActivity {
 
         inicializarComponentes();
         firebaseRef = ConfiguracaoFirebase.getReferenciaFirebase();
-
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+
 
         //Configurações Toolbar
 

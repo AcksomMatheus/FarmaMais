@@ -4,7 +4,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import br.edu.ifs.farmamais.model.Cliente;
+
 public class UsuarioFirebase {
+
 
     public static String getIdUsuario(){
         FirebaseAuth autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();

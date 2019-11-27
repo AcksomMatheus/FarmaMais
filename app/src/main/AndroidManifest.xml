@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.edu.ifs.farmamais">
 
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,10 +12,12 @@
         android:roundIcon="@drawable/mlogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".activity.PedidosActivity"
+            android:parentActivityName=".activity.FarmaceuticaActivity" />
         <activity
             android:name=".activity.ProdutosActivity"
-            android:parentActivityName=".activity.HomeActivity"/>
+            android:parentActivityName=".activity.HomeActivity" />
         <activity
             android:name=".activity.EditProdutoFarmaceuticaActivity"
             android:parentActivityName=".activity.FarmaceuticaActivity" />

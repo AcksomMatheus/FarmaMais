@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Ver Carrinho"
+                android:text="Meu Carrinho"
                 android:textColor="@color/colorAccent" />
 
             <TextView

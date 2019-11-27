@@ -1,6 +1,5 @@
 package br.edu.ifs.farmamais.activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +46,7 @@ public class ProdutosActivity extends AppCompatActivity {
     private TextView textNomeFarmaceuticaProdutos;
     private Farmaceutica farmaceuticaSelecionada;
     private AlertDialog dialog;
+    private TextView textCarrinhoQtd, textCarrinhoTotal;
 
     private AdapterProduto adapterProduto;
     private List<Produto> produtos = new ArrayList<>();
@@ -55,6 +56,9 @@ public class ProdutosActivity extends AppCompatActivity {
     private String idUsuarioLogado;
     private Cliente usuario;
     private Pedido pedidoRecuperado;
+    private int qtdItensCarrinho;
+    private Double totalCarrinho;
+    private int metodoPagamento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +72,7 @@ public class ProdutosActivity extends AppCompatActivity {
 
         //Recuperar Empresa Selecionada
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
+        if (bundle != null) {
             farmaceuticaSelecionada = (Farmaceutica) bundle.getSerializable("farmaceutica");
 
             textNomeFarmaceuticaProdutos.setText(farmaceuticaSelecionada.getNomeFarmaceutica());
@@ -122,7 +126,7 @@ public class ProdutosActivity extends AppCompatActivity {
         final EditText editQuantidade = new EditText(this);
         editQuantidade.setText("1");
 
-        builder.setView( editQuantidade );
+        builder.setView(editQuantidade);
 
         builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
             @Override
@@ -135,11 +139,11 @@ public class ProdutosActivity extends AppCompatActivity {
                 itemPedido.setIdProduto(produtoSelecionado.getIdProduto());
                 itemPedido.setNomeProduto(produtoSelecionado.getNome());
                 itemPedido.setPreco(produtoSelecionado.getPrecoDesc());
-                itemPedido.setQuantidade( Integer.parseInt(quantidade) );
+                itemPedido.setQuantidade(Integer.parseInt(quantidade));
                 //Fazer validação 537
-                itensCarrinho.add( itemPedido );
+                itensCarrinho.add(itemPedido);
 
-                if( pedidoRecuperado == null ){
+                if (pedidoRecuperado == null) {
                     pedidoRecuperado = new Pedido(idUsuarioLogado, idFarmaceutica);
                 }
 
@@ -147,7 +151,7 @@ public class ProdutosActivity extends AppCompatActivity {
                 pedidoRecuperado.setEndereco(usuario.getRua());
                 pedidoRecuperado.setNumeroCasa(usuario.getNumero());
                 pedidoRecuperado.setTelefone(usuario.getTelefone());
-                pedidoRecuperado.setItens( itensCarrinho );
+                pedidoRecuperado.setItens(itensCarrinho);
                 pedidoRecuperado.salvar();
 
             }
@@ -159,7 +163,7 @@ public class ProdutosActivity extends AppCompatActivity {
 
             }
         });
-        AlertDialog dialog =  builder.create();
+        AlertDialog dialog = builder.create();
         dialog.show();
 
     }
@@ -175,7 +179,7 @@ public class ProdutosActivity extends AppCompatActivity {
         usuariosRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if( dataSnapshot.getValue() != null){
+                if (dataSnapshot.getValue() != null) {
                     usuario = dataSnapshot.getValue(Cliente.class);
                 }
                 recuperarPedido();
@@ -189,8 +193,45 @@ public class ProdutosActivity extends AppCompatActivity {
     }
 
     private void recuperarPedido() {
+        final DatabaseReference pedidoRef = firebaseRef.child("pedidos_cliente").child(idFarmaceutica).child(idUsuarioLogado);
 
-        dialog.dismiss();
+        pedidoRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                qtdItensCarrinho = 0;
+                totalCarrinho = 0.0;
+                itensCarrinho = new ArrayList<>();
+
+                if (dataSnapshot.getValue() != null) {
+
+                    pedidoRecuperado = dataSnapshot.getValue(Pedido.class);
+                    itensCarrinho = pedidoRecuperado.getItens();
+
+                    for (ItemPedido itemPedido : itensCarrinho) {
+
+                        int qtde = itemPedido.getQuantidade();
+                        Double preco = itemPedido.getPreco();
+
+                        totalCarrinho += (qtde * preco);
+                        qtdItensCarrinho += qtde;
+                    }
+                }
+
+                DecimalFormat df = new DecimalFormat("0.00");
+
+                textCarrinhoQtd.setText("qtd: " + String.valueOf(qtdItensCarrinho));
+                textCarrinhoTotal.setText("R$ " + df.format(totalCarrinho));
+
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 
@@ -201,7 +242,7 @@ public class ProdutosActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 produtos.clear();
-                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     produtos.add(ds.getValue(Produto.class));
                 }
                 adapterProduto.notifyDataSetChanged();
@@ -214,6 +255,7 @@ public class ProdutosActivity extends AppCompatActivity {
         });
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -224,19 +266,67 @@ public class ProdutosActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
-            case R.id.menuPedido :
+        switch (item.getItemId()) {
+            case R.id.menuPedido:
+                confirmarPedido();
                 break;
-
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void confirmarPedido() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
+        builder.setTitle("Selecione um método de pagamento");
+
+        CharSequence[] itens = new CharSequence[]{
+                "Dinheiro", "Máquina cartão"
+        };
+        builder.setSingleChoiceItems(itens, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                metodoPagamento = which;
+            }
+        });
+
+        final EditText editObservacao = new EditText(this);
+        editObservacao.setHint("Digite uma observação");
+        builder.setView(editObservacao);
+
+        builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String observacao = editObservacao.getText().toString();
+                pedidoRecuperado.setMetodoPagamento(metodoPagamento);
+                pedidoRecuperado.setObservacao(observacao);
+                pedidoRecuperado.setStatus("confirmado");
+                pedidoRecuperado.confirmar();
+                pedidoRecuperado.remover();
+                pedidoRecuperado = null;
+
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
     private void inicializarComponentes() {
         recyclerProdutos = findViewById(R.id.recyclerProdutos);
         imageFarmaceuticaProdutos = findViewById(R.id.imageFarmaceuticaProdutos);
         textNomeFarmaceuticaProdutos = findViewById(R.id.textNomeFarmaceuticaProdutos);
+        textCarrinhoQtd = findViewById(R.id.textCarrinhoQtd);
+        textCarrinhoTotal = findViewById(R.id.textCarrinhoTotal);
     }
 }

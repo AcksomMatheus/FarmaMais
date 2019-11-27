@@ -53,7 +53,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {//farmaceutica
                     linearTipoUsuario.setVisibility(View.VISIBLE);
-                } else {//balconista
+                } else {//cliente
                     linearTipoUsuario.setVisibility(View.GONE);
                 }
             }

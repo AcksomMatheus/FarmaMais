@@ -208,6 +208,9 @@ public class FarmaceuticaActivity extends AppCompatActivity {
             case R.id.menuNovoProduto :
                 abrirNovoProduto();
                 break;
+            case R.id.menuPedidos :
+                abrirPedidos();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -230,4 +233,8 @@ public class FarmaceuticaActivity extends AppCompatActivity {
     private void abrirNovoProduto(){
         startActivity(new Intent(FarmaceuticaActivity.this, NovoProdutoFarmaceuticaActivity.class));
     }
+    private void abrirPedidos(){
+        startActivity(new Intent(FarmaceuticaActivity.this, PedidosActivity.class));
+    }
+
 }
